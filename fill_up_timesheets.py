@@ -1,14 +1,14 @@
 import requests
 import pandas as pd
 
-# 🔑 Replace with your Clockify API Key
+# Replace with your Clockify API Key
 API_KEY = "YOUR_API_KEY"
 WORKSPACE_ID = "YOUR_WORKSPACE_ID"  # Get it from Clockify API using get_workspace_id.sh
 
-# 🗂️ Read time entries from CSV
+# Read time entries from CSV
 df = pd.read_csv("timesheet.csv")
 
-# 🔍 Get user ID from Clockify
+# Get user ID from Clockify
 def get_user_id():
     headers = {"X-Api-Key": API_KEY}
     response = requests.get("https://api.clockify.me/api/v1/user", headers=headers)
@@ -19,7 +19,7 @@ def get_user_id():
 USER_ID = get_user_id()
 
 
-# 🎯 Function to create time entry
+# Function to create time entry
 def create_time_entry(start_time, end_time, project_name, task_name, description):
     headers = {
         "X-Api-Key": API_KEY,
@@ -30,7 +30,7 @@ def create_time_entry(start_time, end_time, project_name, task_name, description
     start_iso = f"{start_time}:00Z"
     end_iso = f"{end_time}:00Z"
 
-    # 🔄 Get project ID dynamically (if needed)
+    # Get project ID dynamically (if needed)
     project_id = get_project_id(project_name)
     if task_name.lower() != "skip":
         task_id = get_task_id(project_id, task_name)
@@ -66,7 +66,7 @@ def get_task_id(PROJECT_ID, TASK_NAME):
 
     raise ValueError(f"Task '{TASK_NAME}' not found in project!")
 
-# 🔍 Get project ID from name
+# Get project ID from name
 def get_project_id(project_name):
     projects = []
     for n in range(1, 3):
@@ -82,7 +82,7 @@ def get_project_id(project_name):
     raise ValueError(f"Project '{project_name}' not found!")
 
 
-# 🔄 Process each row from CSV
+# Process each row from CSV
 for _, row in df.iterrows():
     date = row["date"]
     start_time = f"{date}T{row['start_time']}"
